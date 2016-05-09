@@ -1,0 +1,123 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" %>
+
+<%@ Import Namespace="BlogEngine.Core" %>
+<%
+    Page.Header.DataBind();
+
+    //TO fix the bug related TO Perisan Culture
+    if (System.Threading.Thread.CurrentThread.CurrentCulture.LCID == 1065)
+        System.Threading.Thread.CurrentThread.CurrentCulture = new PersianCulture();
+    // for supported of RTL languages
+    if (Resources.labels.LangDirection.Equals("rtl", StringComparison.OrdinalIgnoreCase))
+    {
+        var lc = new LiteralControl("<link href=\"" + Utils.RelativeWebRoot + "Custom/Themes/Standard/css/rtl.css\" rel=\"stylesheet\" />");
+        HeadContent.Controls.Add(lc);
+    }
+
+    if (Security.IsAuthenticated)
+    {
+        aLogin.InnerText = Resources.labels.admin;
+        aLogin.HRef = Utils.RelativeWebRoot + "admin/";
+    }
+    else
+    {
+        aLogin.HRef = Utils.RelativeWebRoot + "Account/login.aspx";
+        aLogin.InnerText = Resources.labels.login;
+    }
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="css/style.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="~/Content/images/blog/blogengine.ico" type="image/x-icon" />
+    <link href="~/scripts/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="~/scripts/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<%# Utils.ApplicationRelativeWebRoot %>scripts/syntaxhighlighter/scripts/XRegExp.js"></script>
+    <script type="text/javascript" src="<%# Utils.ApplicationRelativeWebRoot %>scripts/syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="<%# Utils.ApplicationRelativeWebRoot %>scripts/syntaxhighlighter/scripts/shAutoloader.js"></script>
+    <script type="text/javascript" src="<%# Utils.ApplicationRelativeWebRoot %>scripts/syntaxhighlighter/shActivator.js"></script>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body class="<%=Resources.labels.LangDirection %>">
+    <form runat="Server">
+
+        <div class="container">
+			<button id="menu-toggle" class="menu-toggle"><span>Menu</span></button>
+			<div id="theSidebar" class="sidebar">
+				<button class="close-button fa fa-fw fa-close"></button>
+				<img class="meta__avatar__big" src="img/authors/1.png" alt="Author">
+				<h1><a href="<%=Utils.AbsoluteWebRoot %>"><%=BlogSettings.Instance.Name %></a></h1>
+                <p><%=BlogSettings.Instance.Description %></p>
+				<nav class="related">
+                    <a href="<%=Utils.AbsoluteWebRoot %>"><%=Resources.labels.home %></a>
+                    <a href="<%=Utils.AbsoluteWebRoot %>archive<%= BlogConfig.FileExtension %>"><%=Resources.labels.archive %></a>
+                    <a href="<%=Utils.AbsoluteWebRoot %>contact<%= BlogConfig.FileExtension %>"><%=Resources.labels.contact %></a>
+                    <span class="login-link"><a runat="server" id="aLogin"></a></span>
+				</nav>
+                <blog:WidgetZone ID="WidgetZone1" runat="server" ZoneName="Barra izquierda" />
+			</div>
+
+            <div id="theGrid" class="main">
+				<section class="grid">
+					<header class="top-bar">
+						<h2 class="top-bar__headline">Ultimos Articulos</h2>
+						<div class="filter">
+							<span>Filtrar por:</span>
+							<span class="dropdown">Todos</span>
+						</div>
+					</header>
+					<a class="grid__item" href="#">
+						<h2 class="title title--preview">On Humans &amp; other Beings</h2>
+						<div class="loader"></div>
+						<span class="category">Stories for humans</span>
+						<div class="meta meta--preview">
+							<img class="meta__avatar" src="img/authors/1.png" alt="author01" /> 
+							<span class="meta__date"><i class="fa fa-calendar-o"></i> 9 Apr</span>
+							<span class="meta__reading-time"><i class="fa fa-clock-o"></i> 3 min read</span>
+						</div>
+					</a>
+                    <blog:SearchOnSearch ID="SearchOnSearch1" runat="server" MaxResults="3" Headline="You searched for" Text="Here are some results for the search term on this website" />
+                    <asp:ContentPlaceHolder ID="cphBody" runat="server" />
+				</section>
+				<div>
+					<span>Load more...</span>
+				</div>
+				<footer class="page-meta">
+					<span>Copyright &copy; <%=DateTime.Now.Year %> - <a href="<%=Utils.AbsoluteWebRoot %>"><%=BlogSettings.Instance.Name %></a></span>
+                    <span>Powered by <a href="http://dotnetblogengine.net" target="_blank" title="BlogEngine.NET <%=BlogSettings.Instance.Version() %>">BlogEngine.NET</a></span>
+                    <ul class="float-right list-unstyled social-network">
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Facebook Account|/]" rel="external nofollow"><i class="icon-facebook"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Twitter Account|/]" rel="external nofollow"><i class="icon-twitter"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Google Plus Account|/]" rel="external nofollow"><i class="icon-gplus"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Linkedin Account|/]" rel="external nofollow"><i class="icon-linkedin"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|RSS Link|/syndication.axd/]" rel="external nofollow"><i class="icon-rss"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Instagramm Account|/]" rel="external nofollow"><i class="icon-instagramm"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Pinterest Account|/]" rel="external nofollow"><i class="icon-pinterest-circled"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Soundcloud Account|/]" rel="external nofollow"><i class="icon-soundcloud"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Youtube Account|/]" rel="external nofollow"><i class="icon-youtube"></i></a></li>
+                        <li><a href="[CUSTOMFIELD|THEME|SimpleGridBlogger|Github Account|/]" rel="external nofollow"><i class="icon-git"></i></a></li>
+                    </ul>
+				</footer>
+			</div>
+
+            </div>
+    </form>
+    <script>
+        // Social networks
+        var socialNetwork = $(".social-network li a");
+        for (i = 0; i < socialNetwork.length; ++i) {
+            link = socialNetwork[i];
+            if (link.href == "" || link.href == window.location) {
+                link.parentNode.style.display = "none";
+            }
+        }
+
+        // Admin menu
+        var loginLink = $(".login-link a").attr("href");
+        if (loginLink == "/admin/") {
+            $("nav.related").append('<a href="<%=Utils.AbsoluteWebRoot %>Account/login.aspx?logoff">Logoff</a>');
+        }
+    </script>
+</body>
+</html>
