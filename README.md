@@ -1,3 +1,3 @@
 # SimpleGridBlogger
 Theme for BlogEngine.NET
-Test 1
+Test 2
